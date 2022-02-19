@@ -1,45 +1,81 @@
-import { Box, Text, Heading, Image } from "@chakra-ui/react";
-
-import mapBackground from "../images/mapBackground.jpg";
-import warningLabel from "../images/outline_warning_amber_black_36dp.png"
-
+import { Box, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import GoogleMapReact from "google-map-react";
+import MapMarker from "./MapMarker";
+import NavBar from "./NavBar";
+import { AiOutlineSearch } from "react-icons/ai";
+import WarningPopup from "./WarningPopup";
 
 const WarningNotification = () => {
+  const defaultProps = {
+    center: {
+      lat: 59.95,
+      lng: 30.33,
+    },
+    zoom: 8.5,
+  };
 
-  return (  
-    <Box bg="#D0D0D0" bg="rgba(255,0,0,0.1)" bgImage={mapBackground} bgPosition="center" bgSize="cover" h="896px">
+  const mapData = [
+    {
+      lat: 30.02419,
+      lng: 31.47016,
+      number: 200,
+      size: "medium",
+    },
+  ];
+
+  return (
+    <Box>
+      <NavBar />
       <Box
-      display="flex" flexDir="column"
-      alignItems="center" justifyContent="center"
-      borderBottomRadius="15px"
-      bg="#F94D1C"
-      w="75%"
-      mx="12.5%" py="2%"
-      color="white" fontFamily="Arial" fontSize="25px" letterSpacing="3px"
+        width="100%"
+        height="92vh"
+        alignItems="center"
+        justifyContent="center"
+        bg="rgba(0, 0, 0, 0.6)"
+        zIndex="99"
       >
-        <Image src={warningLabel}/>
-        <Text>Warning</Text>
-      </Box>
-
-      {/* Warning box */}
-      <Box 
-        bg="White"
-        display="flex" flexDir="column"
-        border="solid" borderWidth="2px" borderColor="black" borderRadius="25px"  
-        mt="60%" mx="50px"  
-        alignItems="center" justifyContent="center">
-
-        <Heading>Warning!</Heading>
-        <Text mt="25px"> Entering a known danger zone! </Text>
-
-        {/*Tip Box*/}
-        <Box
-        color="white"
-        bg="#F94D1C"
-        borderRadius="5px"
-        px="80px"
-        my="15px">
-          <Text>Got a Tip?</Text>
+        <GoogleMapReact
+          options={{
+            zoomControl: false,
+            scaleControl: false,
+            fullscreenControl: false,
+            minZoom: 6.5 - 1,
+            maxZoom: 8.5 + 1,
+          }}
+          bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
+          defaultCenter={defaultProps.center}
+          defaultZoom={defaultProps.zoom}
+          center={{
+            lat: 30.04458,
+            lng: 31.24186,
+          }}
+        >
+          {mapData.map((el, i) => (
+            <MapMarker
+              key={i + 1}
+              lat={el.lat}
+              lng={el.lng}
+              number={el.number}
+              size={el.size}
+            />
+          ))}
+        </GoogleMapReact>
+        <Box position="absolute" top="0" w="100%" p="81px 10px 0 10px">
+          <InputGroup>
+            <Input
+              filter="drop-shadow(4px 4px 22px rgba(0, 0, 0, 0.2))"
+              placeholder="Search"
+              bg="white"
+              fontSize="1.25rem"
+              p="20px"
+              pl="40px"
+            />
+            <InputLeftElement
+              pointerEvents="none"
+              children={<AiOutlineSearch fontSize="1.25rem" />}
+            />
+          </InputGroup>
+          <WarningPopup />
         </Box>
       </Box>
     </Box>
