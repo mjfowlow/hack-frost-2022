@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Map from "./components/Map";
-import WarningNotification from './components/WarningNotification';
+import WarningNotification from "./components/WarningNotification";
 
 function App() {
   return (
